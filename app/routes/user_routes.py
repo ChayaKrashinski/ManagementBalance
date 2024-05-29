@@ -3,6 +3,7 @@ from fastapi import APIRouter,HTTPException
 
 from app.db_management.CRUD import *
 from app.models.user import User
+
 user_router = APIRouter()
 user_id = 0
 
@@ -43,7 +44,7 @@ async def update_user(id:int,user:User):
 async def all_users():
     try:
         res=[]
-        users = await get_all_connection("users")
+        users = await get_all_collection("users")
         for u in users:
             res.append(User(id=u.get('id'),name=u.get('name'), password=u.get('password'), mail=u.get('mail')))
         return res
