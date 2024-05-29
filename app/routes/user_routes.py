@@ -1,9 +1,10 @@
 import uvicorn
 from fastapi import APIRouter,HTTPException
 
-from app.db_management.user_CRUD import *
+from app.db_management.CRUD import *
 from app.models.user import User
 user_router = APIRouter()
+user_id = 0
 
 @user_router.post("/register")
 async def register(user: User):
@@ -20,6 +21,7 @@ async def my_user(user:User):
         ret = await get_one('users',user)
         print("/routes")
         ret = User(id=ret.get('id'),name=ret.get('name'), password=ret.get('password'), mail=ret.get('mail'))
+        user_id=ret.id
         return ret
     except Exception as e:
         print("/routes error:")

@@ -1,13 +1,13 @@
 import uvicorn as uvicorn
 from fastapi import FastAPI
 
-# from app.db_management.connection import get_db
-from app.routes.user_routes import user_router
+from app.routes.balance_routes import balance_router
+from app.routes.user_routes import *
 
 app = FastAPI()
-app.include_router(router=user_router, prefix='/user')
+app.include_router(router=user_router,  prefix='/user',tags=["users"] )
+app.include_router(router=balance_router, prefix='/balance', tags=["balances"])
 
 if __name__ == '__main__':
-    # get_db()
     uvicorn.run(app, host="127.0.0.1", port=8000)
 
