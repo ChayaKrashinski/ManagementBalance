@@ -14,18 +14,24 @@ async  def get_one(collection, document):
         res = db[collection].find_one({'name':document.name})
         return res
     except Exception as e:
-        print("/get_one error:")
-        # print(e)
-        raise IOError(e)
+        raise RuntimeError(f"Error to getting data from collection {collection}: {e}")
 
 
-# async def get_all_connection(collection):
-#     name_of_collection = collection.name
-#     try:
-#         return list(db[name_of_collection].find({}))
-#     except Exception as e:
-#         raise RuntimeError(f"Error to getting data from collection {name_of_collection}: {e}")
-#
+async def update(collection, document_id, data_to_update):
+    try:
+        result = db[collection].update_one({'id': document_id}, {"$set": data_to_update.__dict__})
+        if result.modified_count == 0:
+            raise ValueError(f"No document with ID {document_id} found in collection {collection}")
+        return "the object updated"
+    except Exception as e:
+        raise RuntimeError(f"Error updating document in collection {collection}: {e}")
+
+async def get_all_connection(collection):
+    try:
+        return list(db[collection].find({}))
+    except Exception as e:
+        raise RuntimeError(f"Error to getting data from collection {collection}: {e}")
+
 
 # async def get_by_id(collection, document_id):
 #     name_of_collection = collection.name
@@ -35,14 +41,6 @@ async  def get_one(collection, document):
 #         raise RuntimeError(f"Error fetching data from collection {name_of_collection}: {e}")
 #
 
-# async def update(collection, document_id, data_to_update):
-#     try:
-#         result = db[collection].update_one({"id": document_id}, {"$set": data_to_update.__dict__})
-#         if result.modified_count == 0:
-#             raise ValueError(f"No document with ID {document_id} found in collection {name_of_collection}")
-#         return data_to_update
-#     except Exception as e:
-#         raise RuntimeError(f"Error updating document in collection {collection}: {e}")
 
 #
 # async def delete(collection, document_id):
